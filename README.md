@@ -1,88 +1,49 @@
-# Fraud Detection - ML Notebooks (End to End ML Project)
-This is where I built and trained my fraud detection models. Everything from exploring the data to training the final model.
+# Credit Card Fraud Detection
 
-## What's Inside
-I worked through this project step by step over several weeks:
+Binary classification on the [IEEE-CIS Fraud Detection](https://www.kaggle.com/c/ieee-fraud-detection) dataset (590K transactions, 3.5% fraud rate, 400+ features).
 
-**Week 1-2: Understanding the Data**
-- `1) EDA.ipynb` - First time seeing 590K transactions. Learned that only 3.5% are fraud.
-- `2) pattern_analysis.ipynb` - Dug deeper into patterns. Found some interesting things about transaction amounts and email domains.
+## Results
 
-**Week 3: Cleaning & Features**
-- `3) preprocessing.ipynb` - Dealt with missing values (lots of them!). Created new features like log-transformed amounts and email domain matching.
+| Model | Features | ROC-AUC | Recall | F1 |
+|---|---|---|---|---|
+| Logistic Regression | 434 | 0.77 | 0.08 | 0.14 |
+| Logistic Regression (balanced) | 434 | 0.79 | 0.67 | 0.17 |
+| Random Forest | 434 | 0.87 | 0.70 | 0.27 |
+| **XGBoost** | **434** | **0.90** | **0.74** | **0.31** |
+| XGBoost (production, 21 features) | 21 | 0.82 | 0.67 | 0.21 |
 
-**Week 4-5: Building Models**
-- `4) baseline_model.ipynb` - Started simple with Logistic Regression.
-Then did Random forest model. Also, I learned about class imbalance issue.
-- `5) advanced_models.ipynb` - Built my best model with XGBoost. Got 88% ROC-AUC using 434 features.
+Best research model gets 0.90 ROC-AUC. Production model trades ~8% AUC for 5x faster inference (<100ms) by dropping features that require historical lookups.
 
-**Week 5: Making It Production-Ready**
-- `6) Production_model.ipynb` - This was the hard part. Realized 434 features won't work in real-time, so I cut it down to 21 features. Lost some accuracy (82% ROC-AUC) but gained speed.
+## Notebooks
 
-## The Dataset
-I used the IEEE-CIS Fraud Detection dataset from Kaggle:
-- 590,291 transactions
-- 3.5% fraud rate (pretty imbalanced!)
-- 400+ features to work with
+Run in order:
 
-## What I Learned
+1. **EDA** - Dataset exploration, fraud rate by product/card/device, missing value analysis
+2. **Pattern Analysis** - Transaction amount distributions, email domain patterns, time-of-day effects, feature correlations
+3. **Preprocessing** - Missing value handling, feature engineering (15 new features), label encoding, time-based train/test split
+4. **Baseline Models** - Logistic regression (with/without class balancing), random forest. Demonstrates why class imbalance handling matters.
+5. **Advanced Models** - XGBoost with hyperparameter tuning via GridSearchCV. Threshold optimization and business impact analysis.
+6. **Production Model** - Reduced feature set (434 -> 21) using only real-time available features. This is the model behind the deployed API.
 
-**The Hard Way:**
-- Class imbalance is real. My first model just predicted "not fraud" for everything and got 96% accuracy. Useless.
-- More features ≠ better in production. My 434-feature model was accurate but way too slow.
-- Accuracy is a terrible metric for fraud detection. Precision and recall matter way more.
+## Deployed
 
-**The Cool Stuff:**
-- Feature engineering makes a huge difference. Simple things like "is this a round dollar amount" actually help.
-- XGBoost is really good at this stuff compared to simpler models.
-- You can get 90% of the performance with way fewer features if you pick the right ones.
+- API: https://credit-card-fraud-detection-api-lmas.onrender.com/docs
+- Dashboard: https://creditcardfrauddetectiondashboard.streamlit.app/
 
-## Key Results
+## Setup
 
-**Research Model (434 features):**
-- ROC-AUC: 88%
-- Recall: 75%
-- Problem: Takes 500ms per prediction, needs data warehouse
-
-**Production Model (21 features):**
-- ROC-AUC: 82%
-- Recall: 67%
-- Win: Under 100ms, works in real-time
-
-I accepted 6% less accuracy to make it actually deployable. Turns out that's how it works in the real world.
-
-## Running the Notebooks
-
-You'll need:
 ```bash
-pip install pandas numpy matplotlib seaborn scikit-learn xgboost jupyter
+pip install -r requirements.txt
 ```
 
-Then just:
-```bash
-jupyter notebook
-```
+Download the IEEE-CIS dataset from [Kaggle](https://www.kaggle.com/c/ieee-fraud-detection/data) and place `train_transaction.csv` and `train_identity.csv` in a `data/` directory. The notebooks expect this path (or adjust the path variables at the top of each notebook).
 
-Start with `1) EDA.ipynb` and work your way through.
+## Known Limitations
 
-## What's Next
+- Label encoding is used for nominal categoricals (e.g., card brand). Target encoding would be more principled but label encoding works adequately with tree models on this dataset.
+- The hyperparameter-tuned XGBoost actually scored slightly lower than the default configuration (0.88 vs 0.90 ROC-AUC). This happened because tuning was done on a 20% subsample optimizing for recall rather than AUC. The default XGBoost is the stronger research model.
+- Feature engineering and encoding is done before the train/test split in the preprocessing notebook. In a production pipeline you'd fit encoders only on training data.
 
-The models from notebook 06 are deployed:
-- API: [https://credit-card-fraud-detection-api-lmas.onrender.com/docs]
-- Dashboard: [https://creditcardfrauddetectiondashboard.streamlit.app/]
-
-Check out those repos to see how I turned this into a working system.
-
-## Note
-
-These are learning notebooks - they're messy in places because I was figuring things out as I went. That's the point. Real ML work is iterative and you learn by trying stuff.
-
----
 ## Contact
-Built by Rikesh Sapkota
 
-- LinkedIn: [https://www.linkedin.com/in/rikesh-sapkota-b0591a29a/]
-- Email: rikeshsapkota123@gmail.com
-
-
-
+Rikesh Sapkota - [LinkedIn](https://www.linkedin.com/in/rikesh-sapkota-b0591a29a/) - rikeshsapkota123@gmail.com
