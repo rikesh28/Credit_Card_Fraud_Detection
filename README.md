@@ -1,6 +1,6 @@
 # Credit Card Fraud Detection
 
-Binary classification on the [IEEE-CIS Fraud Detection](https://www.kaggle.com/c/ieee-fraud-detection) dataset (590K transactions, 3.5% fraud rate, 400+ features).
+Fraud classification on the [IEEE-CIS Fraud Detection](https://www.kaggle.com/c/ieee-fraud-detection) dataset. 590K e-commerce transactions, 3.5% fraud rate, 400+ raw features.
 
 ## Results
 
@@ -10,46 +10,46 @@ Binary classification on the [IEEE-CIS Fraud Detection](https://www.kaggle.com/c
 | Logistic Regression (balanced) | 434 | 0.79 | 0.67 | 0.17 |
 | Random Forest | 434 | 0.87 | 0.70 | 0.27 |
 | **XGBoost** | **434** | **0.90** | **0.74** | **0.31** |
-| XGBoost (production, 20 features) | 20 | 0.82 | 0.67 | 0.21 |
+| XGBoost (production) | 20 | 0.82 | 0.67 | 0.21 |
 
-Best research model gets 0.90 ROC-AUC. Production model trades ~8% AUC for 5x faster inference (<100ms) by dropping features that require historical lookups.
+The production model uses only 20 features that are available at transaction time (no historical lookups). It trades ~8% ROC-AUC for 5x faster inference (<100ms vs ~500ms).
 
-## Notebooks
+## Project structure
 
-Run in order:
+```
+notebooks/
+  1) EDA.ipynb                  - Dataset exploration, missing values, fraud rates by category
+  2) pattern_analysis.ipynb     - Amount distributions, email/device/time patterns
+  3) preprocessing.ipynb        - Cleaning, 15 engineered features, time-based split
+  4) baseline_model.ipynb       - Logistic regression + random forest baselines
+  5) advanced_models.ipynb      - XGBoost, hyperparameter tuning, threshold optimization
+  6) Production_model.ipynb     - 20-feature model for deployment
+```
 
-1. **EDA** - Dataset exploration, fraud rate by product/card/device, missing value analysis
-2. **Pattern Analysis** - Transaction amount distributions, email domain patterns, time-of-day effects, feature correlations
-3. **Preprocessing** - Missing value handling, feature engineering (15 new features), label encoding, time-based train/test split
-4. **Baseline Models** - Logistic regression (with/without class balancing), random forest. Demonstrates why class imbalance handling matters.
-5. **Advanced Models** - XGBoost with hyperparameter tuning via GridSearchCV. Threshold optimization and business impact analysis.
-6. **Production Model** - Reduced feature set (434 -> 20) using only real-time available features. This is the model behind the deployed API.
+Run notebooks in order. Each one loads artifacts from the previous step.
 
-## Deployed
+## Related repos
 
-- API: https://credit-card-fraud-detection-api-lmas.onrender.com/docs
-- Dashboard: https://creditcardfrauddetectiondashboard.streamlit.app/
+- [API (FastAPI)](https://github.com/rikesh28/Credit_Card_Fraud_Detection_API) - REST API serving the production model
+- [Dashboard (Streamlit)](https://github.com/rikesh28/Credit_Card_Fraud_Detection_Dashboard) - Web interface for predictions
+
+Live: [API docs](https://credit-card-fraud-detection-api-lmas.onrender.com/docs) | [Dashboard](https://creditcardfrauddetectiondashboard.streamlit.app/)
 
 ## Setup
 
-Notebooks are built for **Google Colab** with data loaded from Google Drive. To reproduce:
+Built on Google Colab. To reproduce locally:
 
 1. Download the IEEE-CIS dataset from [Kaggle](https://www.kaggle.com/c/ieee-fraud-detection/data)
-2. Upload `train_transaction.csv` and `train_identity.csv` to your Google Drive
-3. Update the file paths at the top of each notebook to match your Drive folder
-4. Run notebooks in order (1 through 6)
+2. Place `train_transaction.csv` and `train_identity.csv` in a `data/` directory
+3. Update file paths at the top of each notebook
+4. `pip install -r requirements.txt`
 
-Local setup:
+## Known issues
 
-```bash
-pip install -r requirements.txt
-```
-
-## Known Limitations
-
-- Label encoding is used for nominal categoricals (e.g., card brand). Target encoding would be more principled but label encoding works adequately with tree models on this dataset.
-- The hyperparameter-tuned XGBoost actually scored slightly lower than the default configuration (0.88 vs 0.90 ROC-AUC). This happened because tuning was done on a 20% subsample optimizing for recall rather than AUC. The default XGBoost is the stronger research model.
-- Feature engineering and encoding is done before the train/test split in the preprocessing notebook. In a production pipeline you'd fit encoders only on training data.
+- **Data leakage**: Label encoders are fit on the full dataset before the train/test split. For a production pipeline, encoders should be fit on training data only. The effect is minor for label encoding with tree models, but it's not best practice.
+- **Hyperparameter tuning**: GridSearchCV was run on a 20% subsample optimizing for recall. The tuned model (0.88 AUC) actually underperformed the default (0.90 AUC). The default XGBoost config is the final research model.
+- **Label encoding**: Used for nominal categoricals like card brand. Target encoding or leaving categories for native XGBoost handling would be better.
+- **No cross-validation**: Single time-based split only. K-fold would give confidence intervals on metrics.
 
 ## Contact
 
