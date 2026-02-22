@@ -77,15 +77,15 @@ Connects to the deployed API by default. Set `API_URL` env var to use a local AP
 
 ## How it works
 
-1. **EDA & feature engineering** — Explored fraud patterns across product types, card brands, email domains, and time of day. Engineered 15 new features and used a time-based train/test split to avoid leaking future data.
+1. **EDA & feature engineering** = Explored fraud patterns across product types, card brands, email domains, and time of day. Engineered 15 new features and used a time-based train/test split to avoid leaking future data.
 
-2. **Model selection** — Tried logistic regression, random forest, and XGBoost. XGBoost with default params gave the best results (0.90 AUC). The tuned version actually scored lower (0.88) because I ran GridSearchCV on a 20% subsample to save time, and those params didn't generalize.
+2. **Model selection** = Tried logistic regression, random forest, and XGBoost. XGBoost with default params gave the best results (0.90 AUC). The tuned version actually scored lower (0.88) because I ran GridSearchCV on a 20% subsample to save time, and those params didn't generalize.
 
-3. **Production model** — Most of the 434 research features (V/C/D columns) need historical database lookups (~500ms). Built a 20-feature model using only transaction-time data. Drops to 0.82 AUC but runs in <100ms.
+3. **Production model** = Most of the 434 research features (V/C/D columns) need historical database lookups (~500ms). Built a 20-feature model using only transaction-time data. Drops to 0.82 AUC but runs in <100ms.
 
-4. **API** — FastAPI service serving the production model. Handles preprocessing, returns fraud probability and risk level. Supports single and batch (CSV upload) predictions.
+4. **API** = FastAPI service serving the production model. Handles preprocessing, returns fraud probability and risk level. Supports single and batch (CSV upload) predictions.
 
-5. **Dashboard** — Streamlit UI on top of the API. Test individual transactions, upload CSVs for batch analysis, compare production vs research model metrics.
+5. **Dashboard** = Streamlit UI on top of the API. Test individual transactions, upload CSVs for batch analysis, compare production vs research model metrics.
 
 ## Deployment
 
