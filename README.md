@@ -24,7 +24,7 @@ notebooks/                             ML exploration and training
   2) pattern_analysis.ipynb              Amount distributions, email/time patterns
   3) preprocessing.ipynb                 Feature engineering (15 new), time-based split
   4) baseline_model.ipynb                Logistic regression, random forest
-  5) advanced_models.ipynb               XGBoost, hyperparameter tuning, threshold optimization
+  5) advanced_models.ipynb               XGBoost,hyperparameter tuning,threshold optimization
   6) Production_model.ipynb              20-feature model for deployment
 
 api/                                   FastAPI backend
