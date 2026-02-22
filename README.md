@@ -10,7 +10,7 @@ Binary classification on the [IEEE-CIS Fraud Detection](https://www.kaggle.com/c
 | Logistic Regression (balanced) | 434 | 0.79 | 0.67 | 0.17 |
 | Random Forest | 434 | 0.87 | 0.70 | 0.27 |
 | **XGBoost** | **434** | **0.90** | **0.74** | **0.31** |
-| XGBoost (production, 21 features) | 21 | 0.82 | 0.67 | 0.21 |
+| XGBoost (production, 20 features) | 20 | 0.82 | 0.67 | 0.21 |
 
 Best research model gets 0.90 ROC-AUC. Production model trades ~8% AUC for 5x faster inference (<100ms) by dropping features that require historical lookups.
 
@@ -23,7 +23,7 @@ Run in order:
 3. **Preprocessing** - Missing value handling, feature engineering (15 new features), label encoding, time-based train/test split
 4. **Baseline Models** - Logistic regression (with/without class balancing), random forest. Demonstrates why class imbalance handling matters.
 5. **Advanced Models** - XGBoost with hyperparameter tuning via GridSearchCV. Threshold optimization and business impact analysis.
-6. **Production Model** - Reduced feature set (434 -> 21) using only real-time available features. This is the model behind the deployed API.
+6. **Production Model** - Reduced feature set (434 -> 20) using only real-time available features. This is the model behind the deployed API.
 
 ## Deployed
 
@@ -32,11 +32,18 @@ Run in order:
 
 ## Setup
 
+Notebooks are built for **Google Colab** with data loaded from Google Drive. To reproduce:
+
+1. Download the IEEE-CIS dataset from [Kaggle](https://www.kaggle.com/c/ieee-fraud-detection/data)
+2. Upload `train_transaction.csv` and `train_identity.csv` to your Google Drive
+3. Update the file paths at the top of each notebook to match your Drive folder
+4. Run notebooks in order (1 through 6)
+
+Local setup:
+
 ```bash
 pip install -r requirements.txt
 ```
-
-Download the IEEE-CIS dataset from [Kaggle](https://www.kaggle.com/c/ieee-fraud-detection/data) and place `train_transaction.csv` and `train_identity.csv` in a `data/` directory. The notebooks expect this path (or adjust the path variables at the top of each notebook).
 
 ## Known Limitations
 
