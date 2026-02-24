@@ -11,7 +11,7 @@ Binary classification on the [IEEE-CIS Fraud Detection](https://www.kaggle.com/c
 | Logistic Regression | 434 | 0.77 | 0.08 | 0.14 |
 | Logistic Regression (balanced) | 434 | 0.79 | 0.67 | 0.17 |
 | Random Forest | 434 | 0.87 | 0.70 | 0.27 |
-| **XGBoost** | **434** | **0.90** | **0.74** | **0.31** |
+| **XGBoost** | **434** | **0.88** | **0.74** | **0.31** |
 | XGBoost (production, 20 features) | 20 | 0.82 | 0.67 | 0.21 |
 
 Best research model gets 0.90 ROC-AUC. Production model trades ~8% AUC for 5x faster inference (<100ms) by dropping features that require historical lookups.
