@@ -2,7 +2,7 @@
 
 Streamlit web interface for the fraud detection API. Supports single and batch transaction analysis.
 
-**Live:** https://creditcardfrauddetectiondashboard.streamlit.app/
+**Live:** https://frauddetectionsys.streamlit.app/
 
 ## Pages
 
