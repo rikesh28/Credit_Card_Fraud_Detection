@@ -4,6 +4,19 @@ Binary classification on the [IEEE-CIS Fraud Detection](https://www.kaggle.com/c
 
 **Live:** [API docs](https://credit-card-fraud-detection-api-lmas.onrender.com/docs) | [Dashboard](https://frauddetectionsys.streamlit.app/)
 
+## Architecture
+ 
+```mermaid
+flowchart LR
+    A[Kaggle Dataset\590K transactions] --> B[Notebooks\EDA, Feature Engineering\Model Training]
+    B --> C[Trained XGBoost Model\20 features]
+    C --> D[FastAPI Backend\Preprocessing + Prediction]
+    E[User] --> F[Streamlit Dashboard]
+    F -->|transaction data| D
+    D -->|fraud probability\+ risk level| F
+    F -->|results| E
+```
+
 ## Results
 
 | Model | Features | ROC-AUC | Recall | F1 |
