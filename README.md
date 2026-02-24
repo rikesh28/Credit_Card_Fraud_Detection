@@ -100,4 +100,4 @@ Connects to the deployed API by default. Set `API_URL` env var to use a local AP
 
 ## Contact
 
-Rikesh Sapkota - [LinkedIn](linkedin.com/in/rikeshsapkota) - rikeshsapkota123@gmail.com
+Rikesh Sapkota - [LinkedIn](https://www.linkedin.com/in/rikeshsapkota) - rikeshsapkota123@gmail.com
