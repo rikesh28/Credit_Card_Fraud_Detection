@@ -2,7 +2,7 @@
 
 Binary classification on the [IEEE-CIS Fraud Detection](https://www.kaggle.com/c/ieee-fraud-detection) dataset (590K transactions, 3.5% fraud rate, 400+ features). Includes the full ML pipeline, a FastAPI backend for real-time predictions, and a Streamlit dashboard.
 
-**Live:** [API docs](https://credit-card-fraud-detection-api-lmas.onrender.com/docs) | [Dashboard](https://creditcardfrauddetectiondashboard.streamlit.app/)
+**Live:** [API docs](https://credit-card-fraud-detection-api-lmas.onrender.com/docs) | [Dashboard](https://frauddetectionsys.streamlit.app/)
 
 ## Results
 
@@ -100,4 +100,4 @@ Connects to the deployed API by default. Set `API_URL` env var to use a local AP
 
 ## Contact
 
-Rikesh Sapkota - [LinkedIn](https://www.linkedin.com/in/rikesh-sapkota-b0591a29a/) - rikeshsapkota123@gmail.com
+Rikesh Sapkota - [LinkedIn](linkedin.com/in/rikeshsapkota) - rikeshsapkota123@gmail.com
